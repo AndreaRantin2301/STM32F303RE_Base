@@ -53,3 +53,5 @@ dkms.conf
 
 .vscode/
 out/
+docs/html
+docs/latex
