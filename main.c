@@ -1,9 +1,11 @@
-
+#include "clock_driver/clock_driver.h"
 
 int main(void) {
 
-    int a = 0;
-    a++;
+    StatusCode checkError = System_Clock_Init();
+    if(checkError != OK) {
+        while(1);
+    }
 
     while(1) {
         

@@ -1,6 +1,6 @@
 Compiler=arm-none-eabi-gcc
 Core=cortex-m4
-CFlags = -c -mcpu=cortex-m4 -mthumb -std=gnu23 -mfloat-abi=soft -g -O0 \
+CFlags = -c -mcpu=cortex-m4 -Iinc -Ithird_party -mthumb -std=gnu23 -mfloat-abi=soft -g -O0 \
 		 -Wall -Wextra -Wpedantic -Werror -Wshadow -Wpointer-arith -Wcast-qual \
 		 -Wcast-align -Wsign-conversion -Wswitch-default -Wswitch-enum \
 		 -Wstrict-prototypes -Wmissing-prototypes -Wconversion -Wredundant-decls \
@@ -17,6 +17,8 @@ LDFlags= -mcpu=$(Core) -mthumb -nostdlib -T $(STARTUP_DIR)/linkerScript.ld -Wl,-
 STARTUP_DIR = startup
 OUT_DIR	=	out
 DEBUG_DIR =	debug
+SRC_DIR = src
+CLOCK_DRIVER_DIR = $(SRC_DIR)/clock_driver
 
 $(STARTUP_DIR):
 	mkdir $@
@@ -27,7 +29,7 @@ $(OUT_DIR):
 $(DEBUG_DIR):
 	mkdir $@
 
-all: $(OUT_DIR) main.o startup.o $(DEBUG_DIR)/firmware.elf
+all: $(OUT_DIR) main.o startup.o clock_driver.o $(DEBUG_DIR)/firmware.elf
 
 main.o:main.c | $(OUT_DIR)
 	$(Compiler) $(CFlags) main.c -o $(OUT_DIR)/main.o
@@ -35,7 +37,10 @@ main.o:main.c | $(OUT_DIR)
 startup.o:$(STARTUP_DIR)/startup.s | $(OUT_DIR)
 	$(Compiler) $(CFlags) $(STARTUP_DIR)/startup.s -o $(OUT_DIR)/startup.o
 
-$(DEBUG_DIR)/firmware.elf: $(OUT_DIR)/main.o $(OUT_DIR)/startup.o | $(DEBUG_DIR)
+clock_driver.o:$(CLOCK_DRIVER_DIR)/clock_driver.c | $(OUT_DIR)
+	$(Compiler) $(CFlags) $(CLOCK_DRIVER_DIR)/clock_driver.c -o $(OUT_DIR)/clock_driver.o
+
+$(DEBUG_DIR)/firmware.elf: $(OUT_DIR)/main.o $(OUT_DIR)/startup.o $(OUT_DIR)/clock_driver.o | $(DEBUG_DIR)
 	$(Compiler) $(LDFlags) -o $@ $^
 	arm-none-eabi-objcopy -O binary $(DEBUG_DIR)/firmware.elf $(DEBUG_DIR)/firmware.bin
 
