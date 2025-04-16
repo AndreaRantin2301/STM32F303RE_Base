@@ -71,3 +71,22 @@ StatusCode System_Clock_Init(void) {
 
     return OK;
 }
+
+void SysTick_Init(void) {
+    
+    SysTick->LOAD = (SYSTEM_CLOCK / 1000) - 1;
+    SysTick->VAL = 0;
+    SysTick->CTRL |= (SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_TICKINT_Msk | SysTick_CTRL_ENABLE_Msk);
+}
+
+volatile uint32_t currentTick = 0;
+
+void SysTick_Handler(void)
+{
+    currentTick++;
+}
+
+void Delay_Ms(uint32_t delay) {
+    uint32_t start = currentTick;
+    while ((currentTick - start) < delay);
+}

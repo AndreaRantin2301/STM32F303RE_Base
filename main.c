@@ -7,6 +7,8 @@ int main(void) {
         while(1);
     }
 
+    SysTick_Init();
+
     while(1) {
         
     }
