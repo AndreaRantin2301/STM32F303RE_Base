@@ -19,6 +19,7 @@ OUT_DIR	=	out
 DEBUG_DIR =	debug
 SRC_DIR = src
 CLOCK_DRIVER_DIR = $(SRC_DIR)/clock_driver
+GPIO_DRIVER_DIR = $(SRC_DIR)/gpio_driver
 
 $(STARTUP_DIR):
 	mkdir $@
@@ -29,7 +30,7 @@ $(OUT_DIR):
 $(DEBUG_DIR):
 	mkdir $@
 
-all: $(OUT_DIR) main.o startup.o clock_driver.o $(DEBUG_DIR)/firmware.elf
+all: $(OUT_DIR) main.o startup.o clock_driver.o gpio_driver.o $(DEBUG_DIR)/firmware.elf
 
 main.o:main.c | $(OUT_DIR)
 	$(Compiler) $(CFlags) main.c -o $(OUT_DIR)/main.o
@@ -40,7 +41,10 @@ startup.o:$(STARTUP_DIR)/startup.s | $(OUT_DIR)
 clock_driver.o:$(CLOCK_DRIVER_DIR)/clock_driver.c | $(OUT_DIR)
 	$(Compiler) $(CFlags) $(CLOCK_DRIVER_DIR)/clock_driver.c -o $(OUT_DIR)/clock_driver.o
 
-$(DEBUG_DIR)/firmware.elf: $(OUT_DIR)/main.o $(OUT_DIR)/startup.o $(OUT_DIR)/clock_driver.o | $(DEBUG_DIR)
+gpio_driver.o:$(GPIO_DRIVER_DIR)/gpio_driver.c | $(OUT_DIR)
+	$(Compiler) $(CFlags) $(GPIO_DRIVER_DIR)/gpio_driver.c -o $(OUT_DIR)/gpio_driver.o
+
+$(DEBUG_DIR)/firmware.elf: $(OUT_DIR)/main.o $(OUT_DIR)/startup.o $(OUT_DIR)/clock_driver.o $(OUT_DIR)/gpio_driver.o | $(DEBUG_DIR)
 	$(Compiler) $(LDFlags) -o $@ $^
 	arm-none-eabi-objcopy -O binary $(DEBUG_DIR)/firmware.elf $(DEBUG_DIR)/firmware.bin
 

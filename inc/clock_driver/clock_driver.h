@@ -8,5 +8,6 @@ StatusCode System_Clock_Init(void);
 void SysTick_Init(void);
 void SysTick_Handler(void);
 void Delay_Ms(uint32_t delay);
+StatusCode Gpio_Clock_Enable(GPIOPortEnum portEnum);
 
 #endif

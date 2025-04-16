@@ -90,3 +90,36 @@ void Delay_Ms(uint32_t delay) {
     uint32_t start = currentTick;
     while ((currentTick - start) < delay);
 }
+
+StatusCode Gpio_Clock_Enable(GPIOPortEnum portEnum) {
+    switch(portEnum) {
+        case GPIO_PORT_A:
+            RCC->AHBENR |= RCC_AHBENR_GPIOAEN;
+            break;
+        case GPIO_PORT_B:
+            RCC->AHBENR |= RCC_AHBENR_GPIOBEN;
+            break;
+        case GPIO_PORT_C:
+            RCC->AHBENR |= RCC_AHBENR_GPIOCEN;
+            break;
+        case GPIO_PORT_D:
+            RCC->AHBENR |= RCC_AHBENR_GPIODEN;
+            break;
+        case GPIO_PORT_E:
+            RCC->AHBENR |= RCC_AHBENR_GPIOEEN;
+            break;
+        case GPIO_PORT_F:
+            RCC->AHBENR |= RCC_AHBENR_GPIOFEN;
+            break;
+        case GPIO_PORT_G:
+            RCC->AHBENR |= RCC_AHBENR_GPIOGEN;
+            break;
+        case GPIO_PORT_H:
+            RCC->AHBENR |= RCC_AHBENR_GPIOHEN;
+            break;
+        default:
+            return ERROR_GPIO_CLOCK;
+    }
+
+    return OK;
+}
