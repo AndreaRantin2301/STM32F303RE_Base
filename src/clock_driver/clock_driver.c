@@ -123,3 +123,27 @@ StatusCode Gpio_Clock_Enable(GPIOPortEnum portEnum) {
 
     return OK;
 }
+
+StatusCode Serial_Clock_Enable(SerialEnum serialEnum) {
+    switch(serialEnum) {
+        case SERIAL_USART1:
+            RCC->APB2ENR |= RCC_APB2ENR_USART1EN;
+            break;
+        case SERIAL_USART2:
+            RCC->APB1ENR |= RCC_APB1ENR_USART2EN;
+            break;
+        case SERIAL_USART3:
+            RCC->APB1ENR |= RCC_APB1ENR_USART3EN;
+            break;
+        case SERIAL_UART4:
+            RCC->APB1ENR |= RCC_APB1ENR_UART4EN;
+            break;
+        case SERIAL_UART5:
+            RCC->APB1ENR |= RCC_APB1ENR_UART5EN;
+            break;
+        default:
+        return ERROR_SERIAL_CLOCK;
+    }
+
+    return OK;
+}

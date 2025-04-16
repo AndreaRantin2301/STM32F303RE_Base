@@ -10,6 +10,7 @@ typedef enum {
     ERROR_INVALID_PIN,
     ERROR_INVALID_PORT,
     ERROR_INVALID_MODE,
+    ERROR_SERIAL_CLOCK,
 }StatusCode;
 
 typedef enum {
@@ -22,5 +23,13 @@ typedef enum {
     GPIO_PORT_G,
     GPIO_PORT_H,
 }GPIOPortEnum;
+
+typedef enum {
+    SERIAL_USART1,
+    SERIAL_USART2,
+    SERIAL_USART3,
+    SERIAL_UART4,
+    SERIAL_UART5,
+}SerialEnum;
 
 #endif
